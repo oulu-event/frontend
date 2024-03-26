@@ -1,2 +1,1 @@
-# Group K Project - Event Manager
-# Front-end
+# Group K Project - Event Manager - Front-end
