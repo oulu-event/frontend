@@ -1,0 +1,26 @@
+li{
+    list-style: none;
+}
+
+.searchDiv{
+    margin: 22px 0px;
+}
+
+.center-placeholder{
+    width: 90%;
+    margin: 0 auto;
+    padding: 16px 10px;
+    border-radius: 18px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.center-placeholder::placeholder {
+    text-align: center;
+    
+}
+
+@media only screen and (max-width: 600px) {
+    .center-placeholder{
+        padding: 10px 10px;
+    }
+}
