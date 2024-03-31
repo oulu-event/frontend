@@ -16,7 +16,34 @@ li{
 
 .center-placeholder::placeholder {
     text-align: center;
-    
+}
+
+.event-main-div{
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 18px;
+    padding: 10px 10px;
+    margin: 10px 25px;
+}
+
+.event-top-row{
+    position: relative;
+}
+
+.event-top-row-expand{
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.members-div{
+    display: flex;
+    justify-content: space-evenly;
+    /* align-items: center; */
+    /* flex-wrap: wrap; */
+    margin: 10px 0px;  
 }
 
 @media only screen and (max-width: 600px) {
