@@ -38,36 +38,21 @@
             </div>
         </nav>
 
-        <!-- Search box -->
-        <div class="searchDiv">
-            <form action="#" role="search">
-                <input type="search" class="form-control center-placeholder" placeholder="Search Events">
-            </form>
-        </div>
-
-        <!-- Event Rooms -->
-        <div id="eventMainRow" class="row"></div>
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Event title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Detail Description of the event
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-                    </div>
+        <div class="w-100 m-auto" style="max-width: 330px; padding: 1rem;" id="login">
+            <h3 class="mb-3">Login</h3>
+            <form>
+                <div class="my-2">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="user-email" placeholder="Type email">
                 </div>
-            </div>
+                <div class="my-2">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Type password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100 my-3" id="login-button">Login</button>
+            </form>
+            <p>Do not have account yet? <a href="./signup.html">Sign up</a></p>
         </div>
-        
     </div>
 
 
@@ -75,7 +60,6 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script type="module" src="./js/user.js"></script>
+    <script type="module" src="./js/login.js"></script>
 </body>
 </html>
-
-<script src="./js/main.js"></script>
