@@ -23,11 +23,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
+                        </li> -->
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Famous Events</a>
+                            <a class="nav-link" href="#">My-Events</a>
                         </li>
                     </ul>
 
@@ -48,130 +48,26 @@
         </div>
 
         <!-- Event Rooms -->
-        <div class="row">
+        <div id="eventMainRow" class="row"></div>
 
-            <!-- each event -->
-            <div class="col-md-3">
-                <div class="event-main-div">
-                    <div class="event-top-row">
-                        <div class="event-top-row-heading"><h2>Event 1</h2></div>
-                        <div class="event-top-row-expand"><i class="bi bi-info-circle"></i></div>
-                    </div>
-                    <p>Event Description</p>
-                    <div class="members-div">
-                        <div class="indie-member">
-                            <i class="bi bi-people"></i>
-                            <span>10</span>
-                        </div>
 
-                        <div class="indie-member">
-                            <i class="bi bi-people-fill"></i>
-                            <span>5</span>
-                        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Event title</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <button class="btn btn-outline-primary">Join</button>
+                    <div class="modal-body">
+                        Detail Description of the event
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                    </div>
                 </div>
             </div>
-
-            <!-- each event -->
-            <div class="col-md-3">
-                <div class="event-main-div">
-                    <div class="event-top-row">
-                        <div class="event-top-row-heading"><h2>Event 2</h2></div>
-                        <div class="event-top-row-expand"><i class="bi bi-info-circle"></i></div>
-                    </div>
-                    <p>Event Description</p>
-                    <div class="members-div">
-                        <div class="indie-member">
-                            <i class="bi bi-people"></i>
-                            <span>10</span>
-                        </div>
-
-                        <div class="indie-member">
-                            <i class="bi bi-people-fill"></i>
-                            <span>5</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline-primary">Join</button>
-                </div>
-            </div>
-
-            <!-- each event -->
-            <div class="col-md-3">
-                <div class="event-main-div">
-                    <div class="event-top-row">
-                        <div class="event-top-row-heading">
-                            <h2>Event 3</h2>
-                        </div>
-                        <div class="event-top-row-expand"><i class="bi bi-info-circle"></i></div>
-                    </div>
-                    <p>Event Description</p>
-                    <div class="members-div">
-                        <div class="indie-member">
-                            <i class="bi bi-people"></i>
-                            <span>10</span>
-                        </div>
-            
-                        <div class="indie-member">
-                            <i class="bi bi-people-fill"></i>
-                            <span>5</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline-primary">Join</button>
-                </div>
-            </div>
-
-            <!-- each event -->
-            <div class="col-md-3">
-                <div class="event-main-div">
-                    <div class="event-top-row">
-                        <div class="event-top-row-heading">
-                            <h2>Event 4</h2>
-                        </div>
-                        <div class="event-top-row-expand"><i class="bi bi-info-circle"></i></div>
-                    </div>
-                    <p>Event Description</p>
-                    <div class="members-div">
-                        <div class="indie-member">
-                            <i class="bi bi-people"></i>
-                            <span>10</span>
-                        </div>
-            
-                        <div class="indie-member">
-                            <i class="bi bi-people-fill"></i>
-                            <span>5</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline-primary">Join</button>
-                </div>
-            </div>
-
-            <!-- each event -->
-            <div class="col-md-3">
-                <div class="event-main-div">
-                    <div class="event-top-row">
-                        <div class="event-top-row-heading">
-                            <h2>Event 5</h2>
-                        </div>
-                        <div class="event-top-row-expand"><i class="bi bi-info-circle"></i></div>
-                    </div>
-                    <p>Event Description</p>
-                    <div class="members-div">
-                        <div class="indie-member">
-                            <i class="bi bi-people"></i>
-                            <span>10</span>
-                        </div>
-            
-                        <div class="indie-member">
-                            <i class="bi bi-people-fill"></i>
-                            <span>5</span>
-                        </div>
-                    </div>
-                    <button class="btn btn-outline-primary">Join</button>
-                </div>
-            </div>
-
-
         </div>
         
     </div>
@@ -182,3 +78,5 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+
+<script src="./js/main.js"></script>
