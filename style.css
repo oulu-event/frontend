@@ -50,6 +50,45 @@ a{
     margin: 10px 0px;  
 }
 
+.chatDiv{
+    margin: 10px 0px;
+    padding: 10px 10px;
+    border-radius: 18px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.chat {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow-y: auto;
+}
+
+.chat-body {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.chat-footer {
+    position: sticky;
+    bottom: 40px;
+    width: 80%;
+}
+
+.chat-box{
+    padding: 20px 30px;
+    border-radius: 18px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 @media only screen and (max-width: 600px) {
     .center-placeholder{
         padding: 10px 10px;
