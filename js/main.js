@@ -11,7 +11,7 @@ let eventData = [
         description: 'This is the description for Event 2',
         totalMembersAllowed: 10,
         totalMembersJoined: 5,
-        isJoined: true,
+        isJoined: false,
     },
     {
         title: 'Event 3',
