@@ -13,6 +13,8 @@ let thisEventRoomDataWithAllChatDataWithAllUserData =
     }
 ]
 
+let urlData = {};
+
 function chatElement(message, role){
     let chatBody = document.querySelector('.chat-body');
 
@@ -50,8 +52,20 @@ function searchInputEntered(event){
 }
 
 window.onload = function(){
+
+    let urlParams = new URLSearchParams(window.location.search);
+    let data = urlParams.get('data')
+    
+    if(data){
+        let eventData = JSON.parse(decodeURIComponent(data));
+
+        urlData = eventData;
+    }
+
+    console.log(urlData)
+
     thisEventRoomDataWithAllChatDataWithAllUserData.forEach((chat) => {
-        chatElement(chat.message, chat.id === currentUser.user_id ? 'loggedInUser' : 'otherUser');
+        chatElement(chat.message + " " + urlData.name, chat.id === currentUser.user_id ? 'loggedInUser' : 'otherUser');
         console.log('chat: ', chat, ' chat.message: ', chat.message)
         console.log('from event room js file')
     })

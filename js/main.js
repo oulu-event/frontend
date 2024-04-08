@@ -122,7 +122,7 @@ function eachEvent(name, description, totalMembersAllowed, totalMembersJoined, i
     joinButton.setAttribute('data-isJoined', isJoined);
     joinButton.innerText = isJoined ? 'Open' : 'Join';
 
-    joinButton.addEventListener('click', join);
+    joinButton.addEventListener('click', ()=>join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined));
 
     eventMainDiv.appendChild(eventTopRow);
     eventMainDiv.appendChild(eventDescription);
@@ -134,7 +134,7 @@ function eachEvent(name, description, totalMembersAllowed, totalMembersJoined, i
     mainRow.appendChild(colDiv);
 }
 
-function join(event){
+function join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined){
     let joinButton = event.target
     let joinDataAttribute = joinButton.getAttribute('data-isJoined')
     if(joinDataAttribute === 'false'){
@@ -145,8 +145,15 @@ function join(event){
         joinButton.classList.add('btn-outline-success')
     }
 
+    let data = JSON.stringify({
+        name: name,
+        description: description,
+        totalMembersAllowed: totalMembersAllowed,
+        totalMembersJoined: totalMembersJoined,
+        isJoined: true,
+    })
     if(joinDataAttribute === 'true'){
-        window.location.href = 'EventRoom.html';
+        window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
     }
 }
 
