@@ -149,3 +149,12 @@ function join(event){
         window.location.href = 'EventRoom.html';
     }
 }
+
+function createevent(event){
+    let eventTitle = document.querySelector('#eventTitle').value;
+    let eventDescription = document.querySelector('#eventDescription').value;
+    let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
+
+    eachEvent(eventTitle, eventDescription, totalMembersAllowed, 0, false);
+    console.log('Create Event Clicked');
+}

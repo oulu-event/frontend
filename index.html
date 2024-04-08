@@ -24,7 +24,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">My-Events</a>
@@ -44,6 +44,13 @@
             <form action="#" role="search">
                 <input type="search" class="form-control center-placeholder" placeholder="Search Events">
             </form>
+        </div>
+
+        <!-- create event -->
+        <div class="createEventDiv">
+            <button type="button" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#createModalEvent">
+                Create Event
+            </button>
         </div>
 
         <!-- Event Rooms -->
@@ -68,6 +75,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal for create Event -->
+        <div class="modal fade" id="createModalEvent" tabindex="-1" aria-labelledby="createModalEventLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="createModalEventLabel">Event Detail:</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="eventTitle" class="form-label createEventTitle">Event Title</label>
+                            <input type="text" class="form-control" id="eventTitle" aria-describedby="emailHelp">
+                        </div>
+                        <div class="mb-3">
+                            <label for="Description" class="form-label createEventDescription">Description</label>
+                            <input type="text" class="form-control" id="eventDescription">
+                        </div>
+                        <div class="mb-3">
+                            <label for="totalMembers" class="form-label createEventTotalMembers">Total Members</label>
+                            <input type="number" class="form-control" id="eventtotalMembers">
+                        </div>
+                        <!-- <button onclick="createEvent(event)" type="button" class="btn btn-primary">Submit</button> -->
+                        <button onclick="createevent(event)" type="button" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         
     </div>
 

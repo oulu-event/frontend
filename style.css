@@ -10,6 +10,10 @@ a{
     margin: 22px 0px;
 }
 
+.createEventDiv{
+    padding: 20px 30px;
+}
+
 .center-placeholder{
     width: 90%;
     margin: 0 auto;
@@ -75,12 +79,41 @@ a{
 .chat-body {
     flex-grow: 1;
     width: 100%;
+    padding: 15px 0px;
+    /* border: 1px solid #e0e0e0; */
+    margin: 10px 0px;
+}
+
+.chat-message[data-role="loggedInUser"]{
+    display: flex;
+    justify-content: flex-end;
+    right: 0px;
+}
+.chat-message[data-role="loggedInUser"] .offset {
+    flex-grow: 1;
+}
+.chat-message[data-role="loggedInUser"] .chat-message-content{
+    flex-grow: 0.3;
+}
+
+.chat-message[data-role="otherUser"] {
+    display: flex;
+    justify-content: flex-start;
+    left: 0px;
+}
+.chat-message[data-role="otherUser"] .offset {
+    flex-grow: 0.3;
+}
+.chat-message[data-role="otherUser"] .chat-message-content{
+    flex-grow: 1;
 }
 
 .chat-footer {
     position: sticky;
-    bottom: 40px;
+    bottom: 0px;
     width: 80%;
+    z-index: 1000;
+    gap: 0px 100px !important;
 }
 
 .chat-box{
