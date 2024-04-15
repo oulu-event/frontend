@@ -60,13 +60,16 @@ class User {
     }
 
     async register(firstname,lastname,dob,email,password) {
-        const data = JSON.stringify({firstname: firstname,lastname: lastname,dob: dob,email: email,password: password});
+        console.log('password at front end from up is: ',password)
+        const data = JSON.stringify({ firstname: firstname, lastname: lastname, dob: dob, email: email, password: password });
+        console.log('password at front end is: ',data)
         const response = await fetch('http://localhost:3001/user/register',{
             method: 'post',
             headers: {'Content-Type':'application/json'},
             body: data
         })
         if(response.ok === true) {
+            console.log('response is ok')
             const json = await response.json();
             return json.id
         } else {
@@ -78,7 +81,7 @@ class User {
         this.#id = undefined;
         this.#email = undefined;
         sessionStorage.removeItem('user');
-    }
+    }    
 }
 
 export { User }

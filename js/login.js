@@ -12,6 +12,8 @@ document.getElementById('login-button').addEventListener("click",(event) => {
     user.login(email,password).then(user => {
         window.location.href="index.html";
     }).catch(error => {
+        console.log('error while login')
+        console.log(error)
         alert(error);
     })
 })

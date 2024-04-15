@@ -36,14 +36,30 @@ let eventData = [
     },
 ];
 
-window.onload = function(){
+window.onload = async function(){
     let mainRow = document.querySelector('#eventMainRow');
 
-    eventData.forEach((event, index) => {
-        eachEvent(event.title, event.description, event.totalMembersAllowed, event.totalMembersJoined, event.isJoined);
-        console.log(event)
+    // eventData.forEach((event, index) => {
+    //     eachEvent(event.title, event.description, event.totalMembersAllowed, event.totalMembersJoined, event.isJoined);
+    //     console.log(event)
+    // })
+    
+    let createEventButton = document.querySelector('#createEventButton');
+    createEventButton.addEventListener('click', createEventButtonClicked);
+
+    await fetch('http://localhost:3001/events/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
     })
-    console.log('Page Loaded');
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        data.forEach((event, index) => {
+            eachEvent(event.title, event.description, event.totalmembers, 0, false);
+        })
+    })
 }
 
 function eachEvent(name, description, totalMembersAllowed, totalMembersJoined, isJoined){
@@ -164,4 +180,33 @@ function createevent(event){
 
     eachEvent(eventTitle, eventDescription, totalMembersAllowed, 0, false);
     console.log('Create Event Clicked');
+}
+
+async function createEventButtonClicked(event){
+    let eventTitle = document.querySelector('#eventTitle').value;
+    let eventDescription = document.querySelector('#eventDescription').value;
+    let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
+
+    let data = JSON.stringify({
+        title: eventTitle,
+        description: eventDescription,
+        totalMembers: totalMembersAllowed
+    })
+
+    await fetch('http://localhost:3001/events/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: data
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        console.log('hello each data')
+        console.log(data.data.title, data.data.description, data.data.totalmembers)
+        eachEvent(data.data.title, data.data.description, data.data.totalmembers, 0, false);
+    })
+    .catch(error => console.error('Error while adding events:', error));
+    
 }

@@ -14,9 +14,12 @@ document.getElementById('signup-button').addEventListener("click",(event) => {
     const dob = dob_input.value;
     const email = email_input.value;
     const password = password_input.value;
+    console.log('password is: ',password);
+    console.log('type of password is: ',typeof password);
 
     user.register(firstname,lastname,dob,email,password).then(user => {
         window.location.href="login.html";
+        console.log('I think the user has been registered')
     }).catch(error => {
         alert(error);
     })
