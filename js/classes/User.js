@@ -50,8 +50,12 @@ class User {
         });
         if(response.ok === true) {
             const json = await response.json();
+
+            console.log('data from backend after login is: ', json)
+
             this.#id = json.id;
             this.#email = json.email;
+
             sessionStorage.setItem('user',JSON.stringify(json));
             return this;
         } else {
