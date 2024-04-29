@@ -127,3 +127,14 @@ a{
         padding: 10px 10px;
     }
 }
+
+footer {
+    
+    background: #007bff;
+    color: white;
+}
+footer p {
+    text-align: center;
+    padding: 10px;
+}
+

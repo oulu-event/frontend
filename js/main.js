@@ -47,6 +47,10 @@ window.onload = async function(){
     let createEventButton = document.querySelector('#createEventButton');
     createEventButton.addEventListener('click', createEventButtonClicked);
 
+    await getAllEvents();
+}
+
+async function getAllEvents(){
     await fetch('http://localhost:3001/events/', {
         method: 'GET',
         headers: {
@@ -55,10 +59,21 @@ window.onload = async function(){
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
-        data.forEach((event, index) => {
-            eachEvent(event.title, event.description, event.totalmembers, 0, false);
-        })
+        let allData = data.data
+        console.log('all events Data:', allData)
+        if(allData.length > 0){
+            allData.forEach((event, index) => {
+                console.log('all events Data:', event)
+
+                eachEvent(
+                    event.name,
+                    event.description,
+                    event.total_participants_allowed,
+                    event.total_participants_joined == null ? 0 : event.total_participants_joined,
+                    false
+                );
+            })
+        }
     })
 }
 
@@ -183,30 +198,42 @@ function createevent(event){
 }
 
 async function createEventButtonClicked(event){
-    let eventTitle = document.querySelector('#eventTitle').value;
-    let eventDescription = document.querySelector('#eventDescription').value;
-    let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
+    let session = JSON.parse(sessionStorage.getItem('user'));
 
-    let data = JSON.stringify({
-        title: eventTitle,
-        description: eventDescription,
-        totalMembers: totalMembersAllowed
-    })
-
-    await fetch('http://localhost:3001/events/add', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: data
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        console.log('hello each data')
-        console.log(data.data.title, data.data.description, data.data.totalmembers)
-        eachEvent(data.data.title, data.data.description, data.data.totalmembers, 0, false);
-    })
-    .catch(error => console.error('Error while adding events:', error));
+    if(session === null){
+        window.location.href = 'http://localhost:5500/login.html';
+    }else{
+        let eventTitle = document.querySelector('#eventTitle').value;
+        let eventDescription = document.querySelector('#eventDescription').value;
+        let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
     
+        let data = JSON.stringify({
+            name: eventTitle,
+            location: 'finland',
+            datetime: '2021-10-10',
+            description: eventDescription,
+            total_participants: totalMembersAllowed,
+            user_id: session.id,
+        })
+    
+        await fetch('http://localhost:3001/events', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': session.token,
+            },
+            body: data
+        })
+        .then(response => response.json())
+        .then(async data => {
+            console.log('frontend: returned data, after add event')
+            console.log(data)
+            
+            window.location.href = 'index.html'
+            // console.log(data.data.title, data.data.description, data.data.totalmembers)
+            // eachEvent(data.data.title, data.data.description, data.data.totalmembers, 0, false);
+        })
+        .catch(error => console.error('Error while adding events:', error));
+    }
+
 }
