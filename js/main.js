@@ -63,7 +63,12 @@ async function getAllEvents(){
         console.log('all events Data:', allData)
 
         let currentLoggedInUser = JSON.parse(sessionStorage.getItem('user'));
-        let currentLoggedInUserId = currentLoggedInUser.id;
+        let currentLoggedInUserId = null;
+        if(currentLoggedInUser === null){
+            currentLoggedInUserId = null;
+        }else{
+            currentLoggedInUserId = currentLoggedInUser.id;
+        }
 
         if(allData.length > 0){
             allData.forEach((event, index) => {
@@ -182,41 +187,46 @@ async function join(event, name, description, totalMembersAllowed, totalMembersJ
         window.location.href = 'http://localhost:5500/login.html';
     }else{
 
-        // let joinButton = event.target
-        // let joinDataAttribute = joinButton.getAttribute('data-isJoined')
+        let joinButton = event.target
+        let joinDataAttribute = joinButton.getAttribute('data-isJoined')
 
-        if(!isAdmin){
-            await fetch(`http://localhost:3001/join/${event_id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': session.token,
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('join request sent')
-                console.log(data)
-            })
+
+        // if(!isAdmin){
+        //     await fetch(`http://localhost:3001/join/${event_id}`, {
+        //         method: 'GET',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': session.token,
+        //         }
+        //     })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log('join request sent')
+        //         console.log(data)
+        //     })
+        // }
+
+
+        if(joinDataAttribute === 'false'){
+            joinButton.setAttribute('data-isJoined', 'true')
+            joinButton.innerHTML = 'request sent'
+    
+            joinButton.classList.remove('btn-outline-primary')
+            joinButton.classList.add('btn-outline-success')
         }
-        // if(joinDataAttribute === 'false'){
-        //     joinButton.setAttribute('data-isJoined', 'true')
-        //     joinButton.innerHTML = 'request sent'
     
-        //     joinButton.classList.remove('btn-outline-primary')
-        //     joinButton.classList.add('btn-outline-success')
-        // }
-    
-        // let data = JSON.stringify({
-        //     name: name,
-        //     description: description,
-        //     totalMembersAllowed: totalMembersAllowed,
-        //     totalMembersJoined: totalMembersJoined,
-        //     isJoined: true,
-        // })
-        // if(joinDataAttribute === 'true'){
-        //     window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
-        // }
+        let data = JSON.stringify({
+            name: name,
+            description: description,
+            totalMembersAllowed: totalMembersAllowed,
+            totalMembersJoined: totalMembersJoined,
+            isJoined: true,
+            isAdmin: isAdmin,
+            event_id: event_id,
+        })
+        if(joinDataAttribute === 'true'){
+            window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
+        }
     }
 }
 
@@ -244,7 +254,7 @@ async function createEventButtonClicked(event){
             location: 'finland',
             datetime: '2021-10-10',
             description: eventDescription,
-            total_participants: totalMembersAllowed,
+            total_participants_allowed: totalMembersAllowed,
             user_id: session.id,
         })
     
