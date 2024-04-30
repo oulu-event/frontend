@@ -61,23 +61,34 @@ async function getAllEvents(){
     .then(data => {
         let allData = data.data
         console.log('all events Data:', allData)
+
+        let currentLoggedInUser = JSON.parse(sessionStorage.getItem('user'));
+        let currentLoggedInUserId = currentLoggedInUser.id;
+
         if(allData.length > 0){
             allData.forEach((event, index) => {
                 console.log('all events Data:', event)
+                console.log('logged in user:', JSON.parse(sessionStorage.getItem('user')))
+                console.log('event id:', event.id)
 
                 eachEvent(
-                    event.name,
-                    event.description,
-                    event.total_participants_allowed,
-                    event.total_participants_joined == null ? 0 : event.total_participants_joined,
-                    false
+                    {
+                    name: event.name,
+                    description: event.description,
+                    totalMembersAllowed: event.total_participants_allowed,
+                    totalMembersJoined: event.total_participants_joined == null ? 0 : event.total_participants_joined,
+                    isJoined: currentLoggedInUserId == event.user_id ? true : false,
+                    isAdmin: currentLoggedInUserId == event.user_id ? true : false,
+                    user_id: currentLoggedInUserId,
+                    event_id: event.id
+                }
                 );
             })
         }
     })
 }
 
-function eachEvent(name, description, totalMembersAllowed, totalMembersJoined, isJoined){
+function eachEvent({name, description, totalMembersAllowed, totalMembersJoined, isJoined, isAdmin, user_id, event_id}){
 
     let mainRow = document.querySelector('#eventMainRow');
 
@@ -153,7 +164,7 @@ function eachEvent(name, description, totalMembersAllowed, totalMembersJoined, i
     joinButton.setAttribute('data-isJoined', isJoined);
     joinButton.innerText = isJoined ? 'Open' : 'Join';
 
-    joinButton.addEventListener('click', ()=>join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined));
+    joinButton.addEventListener('click', (event)=>join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined, isAdmin, user_id, event_id));
 
     eventMainDiv.appendChild(eventTopRow);
     eventMainDiv.appendChild(eventDescription);
@@ -165,37 +176,58 @@ function eachEvent(name, description, totalMembersAllowed, totalMembersJoined, i
     mainRow.appendChild(colDiv);
 }
 
-function join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined){
-    let joinButton = event.target
-    let joinDataAttribute = joinButton.getAttribute('data-isJoined')
-    if(joinDataAttribute === 'false'){
-        joinButton.setAttribute('data-isJoined', 'true')
-        joinButton.innerHTML = 'Open'
+async function join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined, isAdmin, user_id, event_id){
+    let session = JSON.parse(sessionStorage.getItem('user'));
+    if(session === null){
+        window.location.href = 'http://localhost:5500/login.html';
+    }else{
 
-        joinButton.classList.remove('btn-outline-primary')
-        joinButton.classList.add('btn-outline-success')
-    }
+        // let joinButton = event.target
+        // let joinDataAttribute = joinButton.getAttribute('data-isJoined')
 
-    let data = JSON.stringify({
-        name: name,
-        description: description,
-        totalMembersAllowed: totalMembersAllowed,
-        totalMembersJoined: totalMembersJoined,
-        isJoined: true,
-    })
-    if(joinDataAttribute === 'true'){
-        window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
+        if(!isAdmin){
+            await fetch(`http://localhost:3001/join/${event_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': session.token,
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('join request sent')
+                console.log(data)
+            })
+        }
+        // if(joinDataAttribute === 'false'){
+        //     joinButton.setAttribute('data-isJoined', 'true')
+        //     joinButton.innerHTML = 'request sent'
+    
+        //     joinButton.classList.remove('btn-outline-primary')
+        //     joinButton.classList.add('btn-outline-success')
+        // }
+    
+        // let data = JSON.stringify({
+        //     name: name,
+        //     description: description,
+        //     totalMembersAllowed: totalMembersAllowed,
+        //     totalMembersJoined: totalMembersJoined,
+        //     isJoined: true,
+        // })
+        // if(joinDataAttribute === 'true'){
+        //     window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
+        // }
     }
 }
 
-function createevent(event){
-    let eventTitle = document.querySelector('#eventTitle').value;
-    let eventDescription = document.querySelector('#eventDescription').value;
-    let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
+// function createevent(event){
+//     let eventTitle = document.querySelector('#eventTitle').value;
+//     let eventDescription = document.querySelector('#eventDescription').value;
+//     let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
 
-    eachEvent(eventTitle, eventDescription, totalMembersAllowed, 0, false);
-    console.log('Create Event Clicked');
-}
+//     eachEvent(eventTitle, eventDescription, totalMembersAllowed, 0, false);
+//     console.log('Create Event Clicked');
+// }
 
 async function createEventButtonClicked(event){
     let session = JSON.parse(sessionStorage.getItem('user'));
