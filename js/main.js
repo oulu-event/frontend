@@ -1,53 +1,65 @@
-let eventData = [
-    {
-        title: 'Event 1',
-        description: 'This is the description for Event 1',
-        totalMembersAllowed: 10,
-        totalMembersJoined: 5,
-        isJoined: false,
-    },
-    {
-        title: 'Event 2',
-        description: 'This is the description for Event 2',
-        totalMembersAllowed: 10,
-        totalMembersJoined: 5,
-        isJoined: false,
-    },
-    {
-        title: 'Event 3',
-        description: 'This is the description for Event 3',
-        totalMembersAllowed: 10,
-        totalMembersJoined: 5,
-        isJoined: false,
-    },
-    {
-        title: 'Event 4',
-        description: 'This is the description for Event 4',
-        totalMembersAllowed: 10,
-        totalMembersJoined: 5,
-        isJoined: false,
-    },
-    {
-        title: 'Event 5',
-        description: 'This is the description for Event 5',
-        totalMembersAllowed: 10,
-        totalMembersJoined: 5,
-        isJoined: false,
-    },
-];
+let eventList;
 
 window.onload = async function(){
-    let mainRow = document.querySelector('#eventMainRow');
+    fetchEvents();
 
-    // eventData.forEach((event, index) => {
-    //     eachEvent(event.title, event.description, event.totalMembersAllowed, event.totalMembersJoined, event.isJoined);
-    //     console.log(event)
-    // })
-    
     let createEventButton = document.querySelector('#createEventButton');
     createEventButton.addEventListener('click', createEventButtonClicked);
 
-    await getAllEvents();
+    const searchBar = document.querySelector('#eventSearch');
+    searchBar.addEventListener('input', (event) => {
+        let searchValue = event.target.value.trim().toLowerCase();
+        const filteredEvents = eventList.filter((event) => event.name.toLowerCase().includes(searchValue));
+        renderEvents(filteredEvents);
+    })
+}
+
+const renderEvents = (events) => {
+    let mainRow = document.querySelector('#eventMainRow');
+    mainRow.innerHTML = "";
+    let currentLoggedInUser = JSON.parse(sessionStorage.getItem('user'));
+    let currentLoggedInUserId = null;
+    if(currentLoggedInUser === null) {
+        currentLoggedInUserId = null;
+    } else {
+        currentLoggedInUserId = currentLoggedInUser.id;
+    }
+    
+    if(events.length > 0) {
+        events.forEach((event) => {
+            console.log('all events Data:', event)
+            console.log('logged in user:', JSON.parse(sessionStorage.getItem('user')))
+            console.log('event id:', event.id)
+            eachEvent({
+                name: event.name,
+                description: event.description,
+                totalMembersAllowed: event.total_participants_allowed,
+                totalMembersJoined: event.total_participants_joined == null ? 0 : event.total_participants_joined,
+                isJoined: currentLoggedInUserId == event.user_id ? true : false,
+                isAdmin: currentLoggedInUserId == event.user_id ? true : false,
+                user_id: currentLoggedInUserId,
+                event_id: event.id
+            });
+        })
+    }
+}
+
+const fetchEvents = async () => {
+    try {
+        const response = await fetch('http://localhost:3001/events/', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const json = await response.json();
+
+        eventList = json.data;
+
+        renderEvents(eventList);
+    } catch (error) {
+        console.error('Error while fetching events:', error);
+    } 
 }
 
 async function getAllEvents(){
@@ -232,15 +244,6 @@ async function join(event, name, description, totalMembersAllowed, totalMembersJ
         
     }
 }
-
-// function createevent(event){
-//     let eventTitle = document.querySelector('#eventTitle').value;
-//     let eventDescription = document.querySelector('#eventDescription').value;
-//     let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
-
-//     eachEvent(eventTitle, eventDescription, totalMembersAllowed, 0, false);
-//     console.log('Create Event Clicked');
-// }
 
 async function createEventButtonClicked(event){
     let session = JSON.parse(sessionStorage.getItem('user'));
