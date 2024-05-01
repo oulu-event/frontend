@@ -91,6 +91,7 @@ async function getAllEvents(){
             })
         }
     })
+    .catch(error => console.error('Error while fetching events:', error));
 }
 
 function eachEvent({name, description, totalMembersAllowed, totalMembersJoined, isJoined, isAdmin, user_id, event_id}){
@@ -187,46 +188,48 @@ async function join(event, name, description, totalMembersAllowed, totalMembersJ
         window.location.href = 'http://localhost:5500/login.html';
     }else{
 
-        let joinButton = event.target
-        let joinDataAttribute = joinButton.getAttribute('data-isJoined')
+        
+        
+        if(!isAdmin){
+            await fetch(`http://localhost:3001/join/${event_id}`, {
+                method: 'GET',
+                headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': session.token,
+                    }
+            })
+            .then(response => response.json())
+            .then(data => {
+                    console.log('join request sent')
+                    console.log(data)
+            })
+        }
+                        
+        // let joinButton = event.target
+        // let joinDataAttribute = joinButton.getAttribute('data-isJoined')
 
-
-        // if(!isAdmin){
-        //     await fetch(`http://localhost:3001/join/${event_id}`, {
-        //         method: 'GET',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Authorization': session.token,
-        //         }
-        //     })
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log('join request sent')
-        //         console.log(data)
-        //     })
+        // if(joinDataAttribute === 'false'){
+        //     joinButton.setAttribute('data-isJoined', 'true')
+        //     joinButton.innerHTML = 'request sent'
+    
+        //     joinButton.classList.remove('btn-outline-primary')
+        //     joinButton.classList.add('btn-outline-success')
+        // }
+    
+        // let data = JSON.stringify({
+        //     name: name,
+        //     description: description,
+        //     totalMembersAllowed: totalMembersAllowed,
+        //     totalMembersJoined: totalMembersJoined,
+        //     isJoined: true,
+        //     isAdmin: isAdmin,
+        //     event_id: event_id,
+        // })
+        // if(joinDataAttribute === 'true'){
+        //     window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
         // }
 
-
-        if(joinDataAttribute === 'false'){
-            joinButton.setAttribute('data-isJoined', 'true')
-            joinButton.innerHTML = 'request sent'
-    
-            joinButton.classList.remove('btn-outline-primary')
-            joinButton.classList.add('btn-outline-success')
-        }
-    
-        let data = JSON.stringify({
-            name: name,
-            description: description,
-            totalMembersAllowed: totalMembersAllowed,
-            totalMembersJoined: totalMembersJoined,
-            isJoined: true,
-            isAdmin: isAdmin,
-            event_id: event_id,
-        })
-        if(joinDataAttribute === 'true'){
-            window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
-        }
+        
     }
 }
 
