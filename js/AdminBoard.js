@@ -45,7 +45,15 @@ window.onload = async function (){
                     let eventName = request.name;
                     let nameOfUser = `${request.firstname} ${request.lastname}`;
                     let statusOfRequest = request.status;
-                    createTable({count, eventName, nameOfUser, statusOfRequest});
+                    createTable({
+                        count: count,
+                        eventName: eventName,
+                        nameOfUser: nameOfUser,
+                        statusOfRequest: statusOfRequest,
+                        event_id: request.event_id,
+                        user_id: request.user_id,
+                        id: request.id
+                    });
                 })
             }
         })
@@ -54,7 +62,7 @@ window.onload = async function (){
 
 
 // table for all events created by this user
-function createTable({count, eventName, nameOfUser, statusOfRequest}){
+function createTable({count, eventName, nameOfUser, statusOfRequest, event_id, user_id, id}){
     let tableBody = document.getElementById('requestTableBody');
 
     let tr = document.createElement('tr');
@@ -80,15 +88,51 @@ function createTable({count, eventName, nameOfUser, statusOfRequest}){
     input.setAttribute('type','checkbox');
     input.classList.add('btn-check');
     input.setAttribute('autocomplete','off');
-    input.setAttribute('id',`btncheck${count}`);
+    input.setAttribute('id',`checkbox${id}`);
     // input.setAttribute('checked', statusOfRequest === 1 ? true : false);
-    input.checked = statusOfRequest === 1 ? true : false;
-
+    
     let label = document.createElement('label');
+    label.setAttribute('id',`label${id}`)
     label.classList.add('btn');
     label.classList.add('btn-outline-primary');
-    label.setAttribute('for',`btncheck${count}`);
-    label.innerHTML = 'Pending';
+    label.setAttribute('for', `checkbox${id}`);
+    label.innerHTML = statusOfRequest == 1 ? 'Accepted' : 'Pending';
+
+    input.checked = statusOfRequest == 1 ? true : false;
+
+
+    input.addEventListener('change', async(event) => {
+        let status = event.target.checked ? 1 : 0;
+        console.log('reqStatus is: ', status)
+
+        await fetch(`http://localhost:3001/request/${id}/${status}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            let returnStatusData = data.data[0];
+            console.log('return status data is: ', returnStatusData)
+
+            let label = document.getElementById(`label${id}`);
+            let input = document.getElementById(`checkbox${id}`);
+            if(returnStatusData.status == 1){
+                
+                label.innerHTML = 'Accepted';
+                input.checked = true;
+            }
+            else{
+                label.innerHTML = 'Pending';
+                input.checked = false;
+            }
+        })
+        .catch(error => {
+            console.log('error while updating status')
+            console.log(error)
+        })
+    })
 
     // div.appendChild(input);
     // div.appendChild(label);
