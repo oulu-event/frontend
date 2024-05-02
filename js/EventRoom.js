@@ -75,6 +75,7 @@ async function searchInputEntered(event){
         .then(data => {
             console.log('after sending message')
             console.log(data)
+            window.location.reload();
         })
         // chatElement(message, 'loggedInUser');
         // event.target.value = '';
