@@ -36,21 +36,102 @@ let eventData = [
     },
 ];
 
-window.onload = async function(){
-    let mainRow = document.querySelector('#eventMainRow');
+let eventList;
 
-    // eventData.forEach((event, index) => {
-    //     eachEvent(event.title, event.description, event.totalMembersAllowed, event.totalMembersJoined, event.isJoined);
-    //     console.log(event)
-    // })
-    
+window.onload = async function () {
+    fetchEvents();
+
     let createEventButton = document.querySelector('#createEventButton');
     createEventButton.addEventListener('click', createEventButtonClicked);
 
-    let searchevent = document.querySelector('#searchInput');
-    searchevent.addEventListener('keyup', searchInputEntered);
+    const searchBar = document.querySelector('#eventSearch');
+    searchBar.addEventListener('input', (event) => {
+        let searchValue = event.target.value.trim().toLowerCase();
+        const filteredEvents = eventList.filter((event) => event.name.toLowerCase().includes(searchValue));
+        renderEvents(filteredEvents);
+    })
+}
 
-    await getAllEvents();
+const renderEvents = (events) => {
+    let mainRow = document.querySelector('#eventMainRow');
+    mainRow.innerHTML = "";
+    let currentLoggedInUser = JSON.parse(sessionStorage.getItem('user'));
+    let currentLoggedInUserId = null;
+    if (currentLoggedInUser === null) {
+        currentLoggedInUserId = null;
+    } else {
+        currentLoggedInUserId = currentLoggedInUser.id;
+    }
+
+    if (events.length > 0) {
+        events.forEach(async (event) => {
+            console.log('all events Data:', event)
+            console.log('logged in user:', JSON.parse(sessionStorage.getItem('user')))
+            console.log('event id:', event.id)
+
+            let ifUserJoinedEvent = false;
+
+
+            if (currentLoggedInUserId != null) {
+                let userId = currentLoggedInUserId;
+                let eventId = event.id;
+                await fetch(`http://localhost:3001/events/${userId}/${eventId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('checking if user has joined event or not:')
+                        console.log(data.data)
+                        if (data.data.length > 0) {
+                            console.log('user has joined event')
+                            let returnedData = data.data[0];
+
+                            if (returnedData.status == 0) {
+                                ifUserJoinedEvent = false;
+                            } else {
+                                ifUserJoinedEvent = true;
+                            }
+                        }
+                    })
+            }
+
+            console.log('*************')
+            console.log('is user admin:', currentLoggedInUserId == event.user_id ? 'true' : 'false')
+
+
+            eachEvent({
+                name: event.name,
+                description: event.description,
+                totalMembersAllowed: event.total_participants_allowed,
+                totalMembersJoined: event.total_participants_joined == null ? 0 : event.total_participants_joined,
+                isJoined: ifUserJoinedEvent,
+                isAdmin: currentLoggedInUserId == event.user_id ? true : false,
+                user_id: currentLoggedInUserId,
+                event_id: event.id
+            });
+        })
+    }
+}
+
+const fetchEvents = async () => {
+    try {
+        const response = await fetch('http://localhost:3001/events/', {
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const json = await response.json();
+
+        eventList = json.data;
+
+        renderEvents(eventList);
+    } catch (error) {
+        console.error('Error while fetching events:', error);
+    }
 }
 
 async function getAllEvents(){
@@ -129,6 +210,9 @@ async function getAllEvents(){
 }
 
 function eachEvent({name, description, totalMembersAllowed, totalMembersJoined, isJoined, isAdmin, user_id, event_id}){
+
+    console.log('###################')
+    console.log('isJoined:', isJoined)
 
     let mainRow = document.querySelector('#eventMainRow');
 
@@ -291,15 +375,6 @@ async function join(event, name, description, totalMembersAllowed, totalMembersJ
         
     }
 }
-
-// function createevent(event){
-//     let eventTitle = document.querySelector('#eventTitle').value;
-//     let eventDescription = document.querySelector('#eventDescription').value;
-//     let totalMembersAllowed = document.querySelector('#eventtotalMembers').value;
-
-//     eachEvent(eventTitle, eventDescription, totalMembersAllowed, 0, false);
-//     console.log('Create Event Clicked');
-// }
 
 async function createEventButtonClicked(event){
     let session = JSON.parse(sessionStorage.getItem('user'));
