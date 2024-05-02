@@ -84,10 +84,22 @@ a{
     margin: 10px 0px;
 }
 
+.chat-message {
+    clear: both;
+    padding: 10px 15px 10px 15px;
+    max-width: 90%;
+    float: left;
+    margin-left: 10px;
+    position: relative;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
 .chat-message[data-role="loggedInUser"]{
-    display: flex;
-    justify-content: flex-end;
-    right: 0px;
+    float: right;
+    margin-right: 10px;
+    background: #007bff;
+    color: black;
 }
 .chat-message[data-role="loggedInUser"] .offset {
     flex-grow: 1;
@@ -97,9 +109,7 @@ a{
 }
 
 .chat-message[data-role="otherUser"] {
-    display: flex;
-    justify-content: flex-start;
-    left: 0px;
+    background: #cce5ff;
 }
 .chat-message[data-role="otherUser"] .offset {
     flex-grow: 0.3;
@@ -109,7 +119,6 @@ a{
 }
 .chat-message-text{
     font-size: 21px;
-    margin-left: 9px;
 }
 .chat-user-name{
     font-size: 15px;
