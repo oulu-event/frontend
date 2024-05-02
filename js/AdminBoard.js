@@ -52,7 +52,7 @@ window.onload = async function () {
                             statusOfRequest: statusOfRequest,
                             event_id: request.event_id,
                             user_id: request.user_id,
-                            id: request.id
+                            id: request.request_id
                         });
                     })
                 }
