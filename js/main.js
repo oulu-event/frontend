@@ -47,6 +47,9 @@ window.onload = async function(){
     let createEventButton = document.querySelector('#createEventButton');
     createEventButton.addEventListener('click', createEventButtonClicked);
 
+    let searchevent = document.querySelector('#searchInput');
+    searchevent.addEventListener('keyup', searchInputEntered);
+
     await getAllEvents();
 }
 
@@ -103,6 +106,9 @@ async function getAllEvents(){
                         }
                     })
                 }
+
+                console.log('*************')
+                console.log('is user admin:', currentLoggedInUserId == event.user_id ? 'true' : 'false')
 
                 eachEvent(
                     {
@@ -193,10 +199,21 @@ function eachEvent({name, description, totalMembersAllowed, totalMembersJoined, 
 
     let joinButton = document.createElement('button');
     joinButton.classList.add('btn');
-    joinButton.classList.add(isJoined ? 'btn-outline-success' : 'btn-outline-primary');
     joinButton.classList.add('joinButton');
     joinButton.setAttribute('data-isJoined', isJoined);
-    joinButton.innerText = isJoined ? 'Open' : 'Join';
+    
+    let buttonType;
+    let buttonColor;
+    if(isAdmin || isJoined){
+        buttonType = 'Open';
+        buttonColor = 'btn-outline-success';
+    }else{
+        buttonType = 'Join';
+        buttonColor = 'btn-outline-primary';
+    }
+    
+    joinButton.classList.add(buttonColor);
+    joinButton.innerText = buttonType;
 
     
     joinButton.addEventListener('click', (event)=>{
@@ -209,7 +226,7 @@ function eachEvent({name, description, totalMembersAllowed, totalMembersJoined, 
             isAdmin: isAdmin,
             event_id: event_id,
         })
-        if(isJoined){
+        if(isJoined || isAdmin){
             window.location.href = 'http://localhost:5500/EventRoom.html?data=' + encodeURIComponent(data);
         }else{
             join(event, name, description, totalMembersAllowed, totalMembersJoined, isJoined, isAdmin, user_id, event_id);

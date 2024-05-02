@@ -89,6 +89,8 @@ window.onload = async function(){
     let data = urlParams.get('data')
     let eventData = JSON.parse(decodeURIComponent(data));
 
+
+    // get all messages for this event
     await fetch(`http://localhost:3001/comments/${eventData.event_id}`, {
         method: 'GET',
         headers: {
@@ -114,6 +116,21 @@ window.onload = async function(){
         console.log('all messages for this event:')
         console.log(data)
     })
+
+
+    // get all members for this event
+    await fetch(`http://localhost:3001/members/${eventData.event_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('all members for this event:')
+        console.log(data)
+    })
+
 
     
     // if(data){
